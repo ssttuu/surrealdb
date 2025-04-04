@@ -189,7 +189,7 @@ pub async fn init(
 		.with_changefeed_gc_interval(changefeed_gc_interval);
 	// Configure the config
 	let config = Config {
-		bind: listen_addresses.first().cloned().unwrap(),
+		bind: listen_addresses.first().copied().unwrap(),
 		client_ip,
 		path,
 		user,

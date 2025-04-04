@@ -66,6 +66,7 @@ impl From<Accept> for HeaderValue {
 	}
 }
 
+#[allow(clippy::fallible_impl_from)]
 impl From<&Accept> for HeaderValue {
 	fn from(value: &Accept) -> Self {
 		HeaderValue::from_str(value.to_string().as_str()).unwrap()
