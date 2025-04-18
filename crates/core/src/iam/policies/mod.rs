@@ -1,10 +1,14 @@
-use cedar_policy::{Authorizer, Context, Decision, Entities, Entity, EntityUid, Request, Response};
-
-mod policy_set;
-
-use policy_set::*;
+use cedar_policy::{
+	Authorizer, Context, Decision, Entities, Entity, EntityUid, PolicySet, Request, Response,
+};
 
 use crate::iam::{Action, Actor, Resource};
+
+use std::str::FromStr;
+use std::sync::LazyLock;
+
+pub static POLICY_SET: LazyLock<PolicySet> =
+	LazyLock::new(|| PolicySet::from_str(include_str!("policy_set.cedar")).unwrap());
 
 /// Checks if the actor is allowed to do the action on the resource, given the context and based on the default policy set.
 pub fn is_allowed(
