@@ -6,7 +6,7 @@ use crate::kvs::{Key, Transaction, Val};
 use crate::sql::{Object, Value};
 #[cfg(debug_assertions)]
 use ahash::HashSet;
-use revision::{revisioned, Revisioned};
+use revision::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::collections::VecDeque;
 use std::fmt::{Debug, Display, Formatter};

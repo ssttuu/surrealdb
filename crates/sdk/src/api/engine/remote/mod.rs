@@ -12,8 +12,8 @@ use crate::api::{self, conn::DbResponse, err::Error, method::query::QueryResult,
 use crate::dbs::{self, Status};
 use crate::method::Stats;
 use indexmap::IndexMap;
+use revision::prelude::*;
 use revision::revisioned;
-use revision::Revisioned;
 use rust_decimal::prelude::ToPrimitive;
 use rust_decimal::Decimal;
 use serde::de::DeserializeOwned;
@@ -161,7 +161,7 @@ pub(crate) struct Response {
 
 fn serialize<V>(value: &V, revisioned: bool) -> Result<Vec<u8>>
 where
-	V: serde::Serialize + Revisioned,
+	V: serde::Serialize + SerializeRevisioned,
 {
 	if revisioned {
 		let mut buf = Vec::new();
@@ -173,7 +173,7 @@ where
 
 fn deserialize<T>(bytes: &[u8], revisioned: bool) -> Result<T>
 where
-	T: Revisioned + DeserializeOwned,
+	T: DeserializeRevisioned + DeserializeOwned,
 {
 	if revisioned {
 		let mut read = std::io::Cursor::new(bytes);

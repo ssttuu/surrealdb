@@ -1,6 +1,6 @@
 use std::{ops::Range, sync::Arc};
 
-use revision::Revisioned;
+use revision::prelude::*;
 
 use crate::err::Error;
 
@@ -31,12 +31,12 @@ pub fn to_prefix_range<K: KeyEncode>(key: K) -> Result<Range<Vec<u8>>, Error> {
 /// returning an error if any of the values fail to serialize.
 pub fn deserialize_cache<'a, I, T>(iter: I) -> Result<Arc<[T]>, Error>
 where
-	T: Revisioned,
+	T: DeserializeRevisioned,
 	I: Iterator<Item = &'a [u8]>,
 {
 	let mut buf = Vec::new();
 	for mut slice in iter {
-		buf.push(Revisioned::deserialize_revisioned(&mut slice)?)
+		buf.push(DeserializeRevisioned::deserialize_revisioned(&mut slice)?)
 	}
 	Ok(Arc::from(buf))
 }

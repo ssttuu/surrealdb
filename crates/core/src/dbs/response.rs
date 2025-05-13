@@ -1,8 +1,7 @@
 use crate::err::Error;
 use crate::sql::Statement;
 use crate::sql::Value as CoreValue;
-use revision::revisioned;
-use revision::Revisioned;
+use revision::prelude::*;
 use serde::ser::SerializeStruct;
 use serde::Deserialize;
 use serde::Serialize;
@@ -129,7 +128,7 @@ impl From<&Response> for QueryMethodResponse {
 	}
 }
 
-impl Revisioned for Response {
+impl SerializeRevisioned for Response {
 	#[inline]
 	fn serialize_revisioned<W: std::io::Write>(
 		&self,
@@ -137,14 +136,19 @@ impl Revisioned for Response {
 	) -> std::result::Result<(), revision::Error> {
 		QueryMethodResponse::from(self).serialize_revisioned(writer)
 	}
+}
 
+impl DeserializeRevisioned for Response {
 	#[inline]
 	fn deserialize_revisioned<R: std::io::Read>(
 		_reader: &mut R,
 	) -> std::result::Result<Self, revision::Error> {
 		unreachable!("deserialising `Response` directly is not supported")
 	}
+}
 
+impl Revisioned for Response {
+	#[inline]
 	fn revision() -> u16 {
 		1
 	}

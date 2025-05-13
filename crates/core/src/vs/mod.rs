@@ -5,7 +5,7 @@
 
 pub use std::{error, fmt, mem};
 
-use revision::Revisioned;
+use revision::prelude::*;
 
 /// Versionstamp is a 10-byte array used to identify a specific version of a key.
 /// The first 8 bytes are significant (the u64), and the remaining 2 bytes are not significant, but used for extra precision.
@@ -46,16 +46,20 @@ impl Revisioned for VersionStamp {
 	fn revision() -> u16 {
 		0
 	}
+}
 
+impl SerializeRevisioned for VersionStamp {
 	fn serialize_revisioned<W: std::io::Write>(&self, w: &mut W) -> Result<(), revision::Error> {
 		self.0.serialize_revisioned(w)
 	}
+}
 
+impl DeserializeRevisioned for VersionStamp {
 	fn deserialize_revisioned<R: std::io::Read>(r: &mut R) -> Result<Self, revision::Error>
 	where
 		Self: Sized,
 	{
-		Revisioned::deserialize_revisioned(r).map(VersionStamp)
+		DeserializeRevisioned::deserialize_revisioned(r).map(VersionStamp)
 	}
 }
 

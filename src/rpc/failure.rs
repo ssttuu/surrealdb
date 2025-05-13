@@ -1,6 +1,5 @@
 use crate::err::Error;
-use revision::revisioned;
-use revision::Revisioned;
+use revision::prelude::*;
 use serde::Serialize;
 use std::borrow::Cow;
 use surrealdb::rpc::RpcError;
@@ -19,7 +18,7 @@ struct Inner {
 	message: String,
 }
 
-impl Revisioned for Failure {
+impl SerializeRevisioned for Failure {
 	fn serialize_revisioned<W: std::io::Write>(
 		&self,
 		writer: &mut W,
@@ -30,11 +29,15 @@ impl Revisioned for Failure {
 		};
 		inner.serialize_revisioned(writer)
 	}
+}
 
+impl DeserializeRevisioned for Failure {
 	fn deserialize_revisioned<R: std::io::Read>(_reader: &mut R) -> Result<Self, revision::Error> {
 		unreachable!("deserialization not supported for this type")
 	}
+}
 
+impl Revisioned for Failure {
 	fn revision() -> u16 {
 		1
 	}

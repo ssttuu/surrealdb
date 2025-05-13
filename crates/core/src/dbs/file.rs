@@ -6,7 +6,7 @@ use crate::sql::Value;
 use ext_sort::{ExternalChunk, ExternalSorter, ExternalSorterBuilder, LimitedBufferBuilder};
 use rand::seq::SliceRandom as _;
 use rand::Rng as _;
-use revision::Revisioned;
+use revision::prelude::*;
 use std::fs::{File, OpenOptions};
 use std::io::{BufReader, BufWriter, Read, Seek, SeekFrom, Take, Write};
 use std::path::{Path, PathBuf};

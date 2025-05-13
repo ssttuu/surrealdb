@@ -3,7 +3,7 @@ pub mod cbor;
 pub mod json;
 pub mod revision;
 
-use ::revision::Revisioned;
+use ::revision::prelude::*;
 use serde::Serialize;
 
 use super::{request::Request, RpcError};
@@ -26,9 +26,9 @@ pub enum Format {
 	Unsupported, // Unsupported format
 }
 
-pub trait ResTrait: Serialize + Into<Value> + Revisioned {}
+pub trait ResTrait: Serialize + Into<Value> + SerializeRevisioned {}
 
-impl<T: Serialize + Into<Value> + Revisioned> ResTrait for T {}
+impl<T: Serialize + Into<Value> + SerializeRevisioned> ResTrait for T {}
 
 impl From<&str> for Format {
 	fn from(v: &str) -> Self {

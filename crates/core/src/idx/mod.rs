@@ -31,7 +31,7 @@ use crate::key::index::vm::Vm;
 use crate::kvs::{Key, KeyEncode as _, Val};
 use crate::sql::statements::DefineIndexStatement;
 use crate::sql::{Id, Thing};
-use revision::Revisioned;
+use revision::prelude::*;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use std::sync::Arc;
@@ -265,7 +265,7 @@ impl IndexKeyBase {
 /// This trait provides `Revision` based default implementations for serialization/deserialization
 trait VersionedStore
 where
-	Self: Sized + Serialize + DeserializeOwned + Revisioned,
+	Self: Sized + Serialize + DeserializeOwned + SerializeRevisioned + DeserializeRevisioned,
 {
 	fn try_into(&self) -> Result<Val, Error> {
 		let mut val = Vec::new();

@@ -4,7 +4,7 @@ use crate::idx::trees::btree::{BState, BState1, BState1skip, BStatistics, BTree,
 use crate::idx::trees::store::TreeNodeProvider;
 use crate::idx::{IndexKeyBase, VersionedStore};
 use crate::kvs::{Key, Transaction, TransactionType, Val};
-use revision::{revisioned, Revisioned};
+use revision::prelude::*;
 use roaring::RoaringTreemap;
 use serde::{Deserialize, Serialize};
 

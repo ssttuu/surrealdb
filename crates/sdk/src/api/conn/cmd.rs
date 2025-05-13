@@ -2,7 +2,7 @@ use super::MlExportConfig;
 use crate::{opt::Resource, value::Notification, Result};
 use async_channel::Sender;
 use bincode::Options;
-use revision::Revisioned;
+use revision::prelude::*;
 use serde::{ser::SerializeMap as _, Serialize};
 use std::borrow::Cow;
 use std::io::Read;
@@ -572,17 +572,19 @@ impl Revisioned for RouterRequest {
 	fn revision() -> u16 {
 		1
 	}
+}
 
+impl SerializeRevisioned for RouterRequest {
 	fn serialize_revisioned<W: std::io::Write>(
 		&self,
 		w: &mut W,
 	) -> std::result::Result<(), revision::Error> {
 		// version
-		Revisioned::serialize_revisioned(&1u32, w)?;
+		SerializeRevisioned::serialize_revisioned(&1u32, w)?;
 		// object variant
-		Revisioned::serialize_revisioned(&9u32, w)?;
+		SerializeRevisioned::serialize_revisioned(&9u32, w)?;
 		// object wrapper version
-		Revisioned::serialize_revisioned(&1u32, w)?;
+		SerializeRevisioned::serialize_revisioned(&1u32, w)?;
 
 		let size = 1 + self.id.is_some() as usize + self.params.is_some() as usize;
 		size.serialize_revisioned(w)?;
@@ -640,7 +642,9 @@ impl Revisioned for RouterRequest {
 
 		Ok(())
 	}
+}
 
+impl DeserializeRevisioned for RouterRequest {
 	fn deserialize_revisioned<R: Read>(_: &mut R) -> std::result::Result<Self, revision::Error>
 	where
 		Self: Sized,
@@ -653,7 +657,7 @@ impl Revisioned for RouterRequest {
 mod test {
 	use std::io::Cursor;
 
-	use revision::Revisioned;
+	use revision::prelude::*;
 	use surrealdb_core::sql::{Number, Value};
 
 	use super::RouterRequest;
